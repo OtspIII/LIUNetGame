@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour
+public class FirstPersonController : NetworkBehaviour
 {
     public Camera Eyes;
     public Rigidbody RB;
@@ -12,15 +13,49 @@ public class FirstPersonController : MonoBehaviour
     public float JumpPower = 7;
     public List<GameObject> Floors;
     
+    public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+    
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+    
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            NetSetup();
+        }
+        else
+            Eyes.gameObject.SetActive(false);
+    }
+    
+    public void NetSetup()
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            var randomPosition = new Vector3(1,1,0);
+            transform.position = randomPosition;
+            Position.Value = randomPosition;
+        }
+        else
+        {
+            GetStartSpotServerRPC();
+        }
+    }
+    
+    [ServerRpc]
+    void GetStartSpotServerRPC(ServerRpcParams rpcParams = default)
+    {
+        Position.Value = new Vector3(-1,-1,0);
+    }
+
 
     
     void Update()
     {
+        if (!IsOwner) return;
         float xRot = Input.GetAxis("Mouse X") * MouseSensitivity;
         float yRot = -Input.GetAxis("Mouse Y") * MouseSensitivity;
         transform.Rotate(0,xRot,0);
@@ -44,6 +79,16 @@ public class FirstPersonController : MonoBehaviour
                 move.y = RB.velocity.y;
             RB.velocity = move;
         }
+        
+        
+    }
+
+    private void LateUpdate()
+    {
+        if(IsOwner)
+            Position.Value = transform.position;
+        else
+            transform.position = Position.Value;
     }
 
     public bool OnGround()
