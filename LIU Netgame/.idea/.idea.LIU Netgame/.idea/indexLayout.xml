@@ -45,8 +45,8 @@
       <Path>Library/PackageCache/com.unity.modules.vr@1.0.0</Path>
       <Path>Library/PackageCache/com.unity.modules.wind@1.0.0</Path>
       <Path>Library/PackageCache/com.unity.modules.xr@1.0.0</Path>
-      <Path>Library/PackageCache/com.unity.netcode.adapter.utp@1.0.0-pre.5</Path>
-      <Path>Library/PackageCache/com.unity.netcode.gameobjects@1.0.0-pre.5</Path>
+      <Path>Library/PackageCache/com.unity.netcode.adapter.utp@1.0.0-pre.6</Path>
+      <Path>Library/PackageCache/com.unity.netcode.gameobjects@1.0.0-pre.6</Path>
       <Path>Library/PackageCache/com.unity.nuget.mono-cecil@1.10.1</Path>
       <Path>Library/PackageCache/com.unity.services.core@1.2.0</Path>
       <Path>Library/PackageCache/com.unity.services.lobby@1.0.0-pre.6</Path>
@@ -54,7 +54,7 @@
       <Path>Library/PackageCache/com.unity.test-framework@1.1.31</Path>
       <Path>Library/PackageCache/com.unity.textmeshpro@3.0.6</Path>
       <Path>Library/PackageCache/com.unity.timeline@1.4.8</Path>
-      <Path>Library/PackageCache/com.unity.transport@1.0.0-pre.12</Path>
+      <Path>Library/PackageCache/com.unity.transport@1.0.0-pre.14</Path>
       <Path>Library/PackageCache/com.unity.ugui@1.0.0</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>

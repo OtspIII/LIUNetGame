@@ -12,12 +12,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
-    <ProjectGuid>{cc78003b-82b9-7220-2506-ae94f88d32f3}</ProjectGuid>
+    <RootNamespace>Unity.Netcode.Samples</RootNamespace>
+    <ProjectGuid>{f10d9cbe-6c2c-5e04-eaca-e52dd091f3d9}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>SimpleRelay</AssemblyName>
+    <AssemblyName>ClientNetworkTransform</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -52,8 +52,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Samples\Relay\1.0.1-pre.6\Simple Relay Sample\SimpleRelay.cs" />
-     <None Include="Assets\Samples\Relay\1.0.1-pre.6\Simple Relay Sample\SimpleRelay.asmdef" />
+     <Compile Include="Assets\Samples\Netcode for GameObjects\1.0.0-pre.6\ClientNetworkTransform\Scripts\ClientNetworkTransform.cs" />
+     <None Include="Assets\Samples\Netcode for GameObjects\1.0.0-pre.6\ClientNetworkTransform\Scripts\ClientNetworkTransform.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.32f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -666,14 +666,11 @@
  <Reference Include="System.Xml.Serialization">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.32f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
  </Reference>
- <Reference Include="Unity.Services.Core">
- <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/Unity.Services.Core.dll</HintPath>
+ <Reference Include="Unity.Netcode.Runtime">
+ <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/Unity.Netcode.Runtime.dll</HintPath>
  </Reference>
- <Reference Include="Unity.Services.Authentication">
- <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/Unity.Services.Authentication.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Services.Relay">
- <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/Unity.Services.Relay.dll</HintPath>
+ <Reference Include="Unity.Netcode.Components">
+ <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/Unity.Netcode.Components.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/Users/Misha/Documents/LIUNetGame/LIU Netgame/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>

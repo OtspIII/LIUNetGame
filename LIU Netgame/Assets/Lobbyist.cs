@@ -17,6 +17,7 @@ public class Lobbyist : MonoBehaviour
     public string RelayJoinCode = "";
     public string PlayerID = "";
     public TextMeshProUGUI DebugText;
+    public static string Text = "";
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class Lobbyist : MonoBehaviour
     void Update()
     {
         if (PlayerID == "") return;
-        DebugText.text = PlayerID + " : " + RelayJoinCode;
+        DebugText.text = Text;
         if (Input.GetKeyDown(KeyCode.Q)) StartCoroutine(ConnectHost());
         if (Input.GetKeyDown(KeyCode.W)) StartCoroutine(ConnectClient());
     }
@@ -38,6 +39,7 @@ public class Lobbyist : MonoBehaviour
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             PlayerID = AuthenticationService.Instance.PlayerId;
+            Text = PlayerID;
         }
         catch (Exception e)
         {
@@ -60,6 +62,7 @@ public class Lobbyist : MonoBehaviour
 
         var (ipv4address, port, allocationIdBytes, connectionData, key, joinCode) = serverRelayUtilityTask.Result;
         RelayJoinCode = joinCode;
+        Text = RelayJoinCode;
 // Display the joinCode to the user.
 
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
