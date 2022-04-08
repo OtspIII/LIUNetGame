@@ -654,6 +654,7 @@ MonoBehaviour:
   NM: {fileID: 860939879}
   StatusText: {fileID: 1182839992}
   NStatus: 0
+  PlayerDebug: 
 --- !u!4 &2133773854
 Transform:
   m_ObjectHideFlags: 0
@@ -722,10 +723,14 @@ PrefabInstance:
     - target: {fileID: 472640069198356393, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
       propertyPath: NetworkConfig.PlayerPrefab
       value: 
-      objectReference: {fileID: 5762141610368144462, guid: c57b3fe6742b928438daeb30a7b9888c, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 472640069198356393, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
+      propertyPath: NetworkConfig.NetworkTransport
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 472640069198356393, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472640069198356393, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[0].Prefab
@@ -735,5 +740,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 472640069198356392, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6c8d1bde5e697984ea8b2f57f0c98c51, type: 3}
