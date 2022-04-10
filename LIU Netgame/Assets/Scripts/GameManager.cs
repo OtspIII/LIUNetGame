@@ -18,12 +18,12 @@ public class GameManager : MonoBehaviour
     }
     
     void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
+    { 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             NM.StartClient();
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             NM.StartHost();
         }

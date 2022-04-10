@@ -8,6 +8,7 @@ public static class God
 {
     public static GameManager GM;
     public static NetworkManager NM;
+    public static LevelManager LM;
     public static LibraryController Library;
     public static TextMeshProUGUI HPText;
     public static TextMeshProUGUI StatusText;

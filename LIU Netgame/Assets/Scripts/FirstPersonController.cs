@@ -33,12 +33,7 @@ public class FirstPersonController : NetworkBehaviour
     
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
-        {
-
-            NetSetup();
-        }
-        else
+        if (!IsOwner)
             Eyes.enabled = false;
 
         if (IsServer)
@@ -47,27 +42,31 @@ public class FirstPersonController : NetworkBehaviour
         }
     }
     
-    public void NetSetup()
+    
+    public void RandomSpawn()
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            var randomPosition = new Vector3(1,1,0);
-            transform.position = randomPosition;
-            Position.Value = randomPosition;
-            
+            RandomSpawnServer();
         }
         else
         {
-            Debug.Log("A");
-            GetStartSpotServerRPC();
+            RandomSpawnServerRPC();
         }
     }
     
     [ServerRpc]
-    void GetStartSpotServerRPC(ServerRpcParams rpcParams = default)
+    void RandomSpawnServerRPC(ServerRpcParams rpcParams = default)
     {
-        Position.Value = new Vector3(-1,-1,0);
-        Debug.Log("B");
+        RandomSpawnServer();
+    }
+
+    void RandomSpawnServer()
+    {
+        PlayerSpawnController psc = God.LM.GetPSpawn(this);
+        Position.Value = psc.transform.position + new Vector3(0, 1, 0);
+        transform.position = Position.Value;
+        SetPosClientRPC(Position.Value);
     }
     
     [ServerRpc]
@@ -77,6 +76,13 @@ public class FirstPersonController : NetworkBehaviour
         Position.Value = transform.position;
         XRot.Value = transform.rotation.y;
         YRot.Value = Eyes.transform.rotation.x;
+    }
+
+    [ClientRpc]
+    void SetPosClientRPC(Vector3 pos)
+    {
+        transform.position = pos;
+        Debug.Log("SPCRPC");
     }
 
 
@@ -178,14 +184,26 @@ public class FirstPersonController : NetworkBehaviour
 
     public void Reset()
     {
+        if (!IsServer) return;
         HP.Value = 100;
+        RandomSpawnServer();
     }
 
-    public void TakeDamage(int amt)
+    public void TakeDamage(int amt,FirstPersonController source=null)
     {
         HP.Value -= amt;
         ParticleGnome pg = Instantiate(God.Library.Blood, transform.position, Quaternion.identity);
         pg.Setup(10);
+        if (HP.Value <= 0)
+        {
+            Die(source);
+        }
+    }
+
+    public void Die(FirstPersonController source=null)
+    {
+        Debug.Log("KILLED BY " + source);
+        Reset();
     }
 }
 

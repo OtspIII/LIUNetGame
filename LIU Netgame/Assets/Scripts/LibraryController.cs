@@ -6,6 +6,7 @@ public class LibraryController : MonoBehaviour
 {
     public ProjectileController Projectile;
     public ParticleGnome Blood;
+    public SpawnableController TestSpawn;
     
     void Awake()
     {

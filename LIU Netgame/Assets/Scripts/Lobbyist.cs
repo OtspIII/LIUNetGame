@@ -36,8 +36,8 @@ public class Lobbyist : MonoBehaviour
     {
         if (PlayerID == "") return;
         DebugText.text = Text;
-        if (Input.GetKeyDown(KeyCode.Q)) StartCoroutine(ConnectHost());
-        if (Input.GetKeyDown(KeyCode.W)) StartCoroutine(ConnectClient());
+        if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(ConnectHost());
+        if (Input.GetKeyDown(KeyCode.Alpha2)) StartCoroutine(ConnectClient());
     }
 
     public async void Login()
