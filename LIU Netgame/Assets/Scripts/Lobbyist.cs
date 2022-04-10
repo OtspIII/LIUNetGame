@@ -17,7 +17,15 @@ public class Lobbyist : MonoBehaviour
     public string RelayJoinCode = "";
     public string PlayerID = "";
     public TextMeshProUGUI DebugText;
+    public TextMeshProUGUI HPText;
+    public TextMeshProUGUI StatusText;
     public static string Text = "";
+
+    private void Awake()
+    {
+        God.HPText = HPText;
+        God.StatusText = StatusText;
+    }
 
     void Start()
     {

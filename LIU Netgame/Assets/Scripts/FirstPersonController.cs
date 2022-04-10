@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class FirstPersonController : NetworkBehaviour
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
     public NetworkVariable<float> XRot = new NetworkVariable<float>();
     public NetworkVariable<float> YRot = new NetworkVariable<float>();
+    public NetworkVariable<int> HP = new NetworkVariable<int>();
+
     
     void Start()
     {
@@ -37,6 +40,11 @@ public class FirstPersonController : NetworkBehaviour
         }
         else
             Eyes.enabled = false;
+
+        if (IsServer)
+        {
+            Reset();
+        }
     }
     
     public void NetSetup()
@@ -46,6 +54,7 @@ public class FirstPersonController : NetworkBehaviour
             var randomPosition = new Vector3(1,1,0);
             transform.position = randomPosition;
             Position.Value = randomPosition;
+            
         }
         else
         {
@@ -75,6 +84,8 @@ public class FirstPersonController : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        God.HPText.text = HP.Value + "/" + 100;
+        God.StatusText.text = "Gun";
         //Lobbyist.Text = transform.position.ToString();
         float xRot = Input.GetAxis("Mouse X") * MouseSensitivity;
         float yRot = -Input.GetAxis("Mouse Y") * MouseSensitivity;
@@ -102,6 +113,10 @@ public class FirstPersonController : NetworkBehaviour
 //            RB.velocity = move;
         }
         HandleMove(move,jump,xRot,yRot);
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot(Eyes.transform.position + Eyes.transform.forward,Eyes.transform.rotation);
+        }
         
         
     }
@@ -122,22 +137,27 @@ public class FirstPersonController : NetworkBehaviour
         transform.Rotate(0,xRot,0);
         Eyes.transform.Rotate(yRot,0,0);
     }
-
-    private void LateUpdate()
+    
+    public void Shoot(Vector3 pos,Quaternion rot)
     {
-//        if (IsOwner)
-//            UpdatePosServerRPC(transform.position, RB.velocity);
-//        else
-//        if (!IsServer)
-//        {
-//            transform.position = Position.Value;
-//            Vector3 rotX = transform.rotation.eulerAngles;
-//            rotX.y = XRot.Value;
-//            transform.rotation = Quaternion.Euler(rotX);
-//            Vector3 rotY = transform.rotation.eulerAngles;
-//            rotY.x = YRot.Value;
-//            transform.rotation = Quaternion.Euler(rotY);
-//        }
+        if (!IsServer)
+        {
+            ShootServerRPC(pos,rot);
+            return;
+        }
+        ServerShoot(pos,rot);
+    }
+    
+    [ServerRpc]
+    void ShootServerRPC(Vector3 pos,Quaternion rot)
+    {
+        ServerShoot(pos,rot);
+    }
+
+    void ServerShoot(Vector3 pos, Quaternion rot)
+    {
+        ProjectileController p = Instantiate(God.Library.Projectile, pos,rot);
+        p.Setup(this);
     }
 
     public bool OnGround()
@@ -154,6 +174,18 @@ public class FirstPersonController : NetworkBehaviour
     private void OnCollisionExit(Collision other)
     {
         Floors.Remove(other.gameObject);
+    }
+
+    public void Reset()
+    {
+        HP.Value = 100;
+    }
+
+    public void TakeDamage(int amt)
+    {
+        HP.Value -= amt;
+        ParticleGnome pg = Instantiate(God.Library.Blood, transform.position, Quaternion.identity);
+        pg.Setup(10);
     }
 }
 
