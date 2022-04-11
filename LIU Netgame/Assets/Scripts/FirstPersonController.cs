@@ -16,6 +16,8 @@ public class FirstPersonController : NetworkBehaviour
     public float WalkSpeed = 10;
     public float JumpPower = 7;
     public List<GameObject> Floors;
+
+    public string Name;
 //    public int ID;
     
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
@@ -29,12 +31,17 @@ public class FirstPersonController : NetworkBehaviour
 //        ID = Random.Range(0, 100);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        God.Players.Add(this);
+        if (Name == "")
+            Name = "Player " + God.Players.Count;
     }
     
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
             Eyes.enabled = false;
+        else
+            God.Camera = Eyes;
 
         if (IsServer)
         {
@@ -89,6 +96,8 @@ public class FirstPersonController : NetworkBehaviour
     
     void Update()
     {
+        if (IsServer && transform.position.y < -100)
+            Die();
         if (!IsOwner) return;
         God.HPText.text = HP.Value + "/" + 100;
         God.StatusText.text = "Gun";
@@ -187,13 +196,12 @@ public class FirstPersonController : NetworkBehaviour
         if (!IsServer) return;
         HP.Value = 100;
         RandomSpawnServer();
+        RB.velocity = Vector3.zero;
     }
 
     public void TakeDamage(int amt,FirstPersonController source=null)
     {
         HP.Value -= amt;
-        ParticleGnome pg = Instantiate(God.Library.Blood, transform.position, Quaternion.identity);
-        pg.Setup(10);
         if (HP.Value <= 0)
         {
             Die(source);
@@ -203,7 +211,14 @@ public class FirstPersonController : NetworkBehaviour
     public void Die(FirstPersonController source=null)
     {
         Debug.Log("KILLED BY " + source);
+        God.LM.AwardPoint(source,1,Name);
         Reset();
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        God.Players.Remove(this);
     }
 }
 

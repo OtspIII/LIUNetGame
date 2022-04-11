@@ -19,6 +19,7 @@ public class ItemSpawnController : MonoBehaviour
 
     void Update()
     {
+        Holder.transform.Rotate(0,5,0);
         if (!NetworkManager.Singleton.IsServer) return;
         if (Held != null) return;
         Countdown -= Time.deltaTime;

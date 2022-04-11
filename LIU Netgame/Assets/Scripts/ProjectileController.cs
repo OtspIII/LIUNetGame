@@ -10,11 +10,13 @@ public class ProjectileController : MonoBehaviour
     public Rigidbody RB;
     public NetworkObject NO;
     public float Lifetime = 10;
+    public FirstPersonController Shooter;
     
     public void Setup(FirstPersonController pc)
     {
+        Shooter = pc;
         NO.Spawn();
-        RB.velocity = transform.forward * 10;
+        RB.velocity = transform.forward * 50;
     }
 
     void Update()
@@ -28,10 +30,15 @@ public class ProjectileController : MonoBehaviour
     {
         if (!NetworkManager.Singleton.IsServer) return;
         FirstPersonController pc = other.gameObject.GetComponent<FirstPersonController>();
-        if (pc != null)
+        ParticleGnome partic = God.Library.Dust;
+        if (pc != null && !pc == Shooter)
         {
-            pc.TakeDamage(10);
+            pc.TakeDamage(10,Shooter);
+            partic = God.Library.Blood;
         }
+        
+        ParticleGnome pg = Instantiate(partic, transform.position, Quaternion.identity);
+        pg.Setup(10);
         Destroy(gameObject);
     }
 }

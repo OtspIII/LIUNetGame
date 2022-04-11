@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6773279522942696827}
   - component: {fileID: 6675870087324227509}
   m_Layer: 0
-  m_Name: Particle
+  m_Name: Particle Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,7 +316,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2

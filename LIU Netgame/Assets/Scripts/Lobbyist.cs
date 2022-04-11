@@ -19,12 +19,16 @@ public class Lobbyist : MonoBehaviour
     public TextMeshProUGUI DebugText;
     public TextMeshProUGUI HPText;
     public TextMeshProUGUI StatusText;
+    public TextMeshProUGUI AnnounceText;
+    public TextMeshProUGUI UpdateText;
     public static string Text = "";
 
     private void Awake()
     {
         God.HPText = HPText;
         God.StatusText = StatusText;
+        God.AnnounceText = AnnounceText;
+        God.UpdateText = UpdateText;
     }
 
     void Start()

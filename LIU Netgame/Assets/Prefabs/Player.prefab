@@ -41,8 +41,8 @@ Camera:
   m_GameObject: {fileID: 772149536382218223}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.13577749, g: 0.116545044, b: 0.254717, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -312,6 +312,8 @@ MonoBehaviour:
   XRot:
     m_InternalValue: 0
   YRot:
+    m_InternalValue: 0
+  HP:
     m_InternalValue: 0
 --- !u!54 &2284296766530852865
 Rigidbody:
