@@ -22,6 +22,9 @@ public class Lobbyist : MonoBehaviour
     public TextMeshProUGUI AnnounceText;
     public TextMeshProUGUI UpdateText;
     public static string Text = "";
+    public TMP_InputField NamePick;
+    public TMP_InputField CodePick;
+    public GameObject LoginScreen;
 
     private void Awake()
     {
@@ -40,8 +43,23 @@ public class Lobbyist : MonoBehaviour
     {
         if (PlayerID == "") return;
         DebugText.text = Text;
-        if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(ConnectHost());
-        if (Input.GetKeyDown(KeyCode.Alpha2)) StartCoroutine(ConnectClient());
+        // if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(ConnectHost());
+        // if (Input.GetKeyDown(KeyCode.Alpha2)) StartCoroutine(ConnectClient());
+    }
+
+    public void Connect()
+    {
+        
+        God.NamePick = NamePick.text;
+        if (CodePick.text == "")
+        {
+            StartCoroutine(ConnectHost());
+        }
+        else
+        {
+            RelayJoinCode = CodePick.text;
+            StartCoroutine(ConnectClient());
+        }
     }
 
     public async void Login()
@@ -80,6 +98,7 @@ public class Lobbyist : MonoBehaviour
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(ipv4address, port, allocationIdBytes, key, connectionData, true);
         yield return null;
         NetworkManager.Singleton.StartHost();
+        LoginScreen.SetActive(false);
         
     }
 
@@ -104,6 +123,7 @@ public class Lobbyist : MonoBehaviour
 
         NetworkManager.Singleton.StartClient();
         yield return null;
+        LoginScreen.SetActive(false);
     }
     
     public static async Task<(string ipv4address, ushort port, byte[] allocationIdBytes, byte[] connectionData, byte[] key, string joinCode)> AllocateRelayServerAndGetJoinCode(int maxConnections, string region = null)
@@ -120,8 +140,8 @@ public class Lobbyist : MonoBehaviour
             throw;
         }
 
-        Debug.Log($"server: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
-        Debug.Log($"server: {allocation.AllocationId}");
+        // Debug.Log($"server: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
+        // Debug.Log($"server: {allocation.AllocationId}");
 
         try
         {
@@ -150,9 +170,9 @@ public class Lobbyist : MonoBehaviour
             throw;
         }
 
-        Debug.Log($"client: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
-        Debug.Log($"host: {allocation.HostConnectionData[0]} {allocation.HostConnectionData[1]}");
-        Debug.Log($"client: {allocation.AllocationId}");
+        // Debug.Log($"client: {allocation.ConnectionData[0]} {allocation.ConnectionData[1]}");
+        // Debug.Log($"host: {allocation.HostConnectionData[0]} {allocation.HostConnectionData[1]}");
+        // Debug.Log($"client: {allocation.AllocationId}");
 
         var dtlsEndpoint = allocation.ServerEndpoints.First(e => e.ConnectionType == "dtls");
         return (dtlsEndpoint.Host, (ushort)dtlsEndpoint.Port, allocation.AllocationIdBytes, allocation.ConnectionData, allocation.HostConnectionData, allocation.Key);

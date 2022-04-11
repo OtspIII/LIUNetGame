@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class ParticleGnome : MonoBehaviour
+public class ParticleGnome : NetworkBehaviour
 {
     public NetworkObject NO;
     public ParticleSystem PS;

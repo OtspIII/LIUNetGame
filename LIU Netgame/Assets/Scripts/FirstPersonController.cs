@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class FirstPersonController : NetworkBehaviour
     public float JumpPower = 7;
     public List<GameObject> Floors;
 
-    public string Name;
+    public NetworkVariable<FixedString64Bytes> Name = new NetworkVariable<FixedString64Bytes>();
 //    public int ID;
     
     public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
@@ -32,8 +33,8 @@ public class FirstPersonController : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         God.Players.Add(this);
-        if (Name == "")
-            Name = "Player " + God.Players.Count;
+        if(IsOwner)
+            SetName(God.NamePick != "" ? God.NamePick : "Player " + God.Players.Count);
     }
     
     public override void OnNetworkSpawn()
@@ -60,6 +61,18 @@ public class FirstPersonController : NetworkBehaviour
         {
             RandomSpawnServerRPC();
         }
+    }
+
+    public void SetName(string n)
+    {
+        if (IsServer) Name.Value = n;
+        else SetNameServerRPC(n);
+    }
+    
+    [ServerRpc]
+    public void SetNameServerRPC(string n)
+    {
+        Name.Value = n;
     }
     
     [ServerRpc]
@@ -89,7 +102,7 @@ public class FirstPersonController : NetworkBehaviour
     void SetPosClientRPC(Vector3 pos)
     {
         transform.position = pos;
-        Debug.Log("SPCRPC");
+        // Debug.Log("SPCRPC");
     }
 
 
@@ -174,6 +187,41 @@ public class FirstPersonController : NetworkBehaviour
         ProjectileController p = Instantiate(God.Library.Projectile, pos,rot);
         p.Setup(this);
     }
+    
+    public void GetPoint(int amt=1,string targ="")
+    {
+        if (!IsServer)
+        {
+            GetPointServerRPC(amt);
+            return;
+        }
+        ServerGetPoint(amt);
+    }
+    
+    [ServerRpc]
+    void GetPointServerRPC(int amt=1,string targ="")
+    {
+        ServerGetPoint(amt);
+    }
+    
+    [ClientRpc]
+    void GetPointClientRPC(int amt=1,string targ="")
+    {
+        if (IsServer) return;
+        getPoint(amt);
+    }
+    
+    void ServerGetPoint(int amt=1,string targ="")
+    {
+        GetPointClientRPC();
+        getPoint(amt);
+    }
+
+    void getPoint(int amt = 1,string targ="")
+    {
+        Debug.Log("GET POINT: " + Name + " / " + amt + " / " + targ);
+        God.LM.AwardPoint(this,amt,targ);
+    }
 
     public bool OnGround()
     {
@@ -211,7 +259,7 @@ public class FirstPersonController : NetworkBehaviour
     public void Die(FirstPersonController source=null)
     {
         Debug.Log("KILLED BY " + source);
-        God.LM.AwardPoint(source,1,Name);
+        if(source!=null) source.GetPoint(1,Name.Value.ToString());
         Reset();
     }
 

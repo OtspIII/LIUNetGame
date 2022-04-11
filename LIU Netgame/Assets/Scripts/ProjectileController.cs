@@ -5,12 +5,13 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : NetworkBehaviour
 {
     public Rigidbody RB;
     public NetworkObject NO;
     public float Lifetime = 10;
     public FirstPersonController Shooter;
+    public bool Hit = false;
     
     public void Setup(FirstPersonController pc)
     {
@@ -28,13 +29,14 @@ public class ProjectileController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (!NetworkManager.Singleton.IsServer) return;
+        if (!NetworkManager.Singleton.IsServer || Hit) return;
         FirstPersonController pc = other.gameObject.GetComponent<FirstPersonController>();
         ParticleGnome partic = God.Library.Dust;
-        if (pc != null && !pc == Shooter)
+        if (pc != null && pc != Shooter)
         {
             pc.TakeDamage(10,Shooter);
             partic = God.Library.Blood;
+            Hit = true;
         }
         
         ParticleGnome pg = Instantiate(partic, transform.position, Quaternion.identity);

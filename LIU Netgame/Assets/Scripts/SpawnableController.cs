@@ -6,15 +6,17 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 
-public class SpawnableController : MonoBehaviour
+public class SpawnableController : NetworkBehaviour
 {
     public ItemSpawnController Spawner;
     public TextMeshPro Desc;
+    public NetworkObject NO;
     
     public void Setup(ItemSpawnController s)
     {
         Spawner = s;
         Desc.text = GetName();
+        NO.Spawn();
     }
 
     void Update()
@@ -41,14 +43,14 @@ public class SpawnableController : MonoBehaviour
     public virtual void TakeEffects(FirstPersonController pc)
     {
         Debug.Log("TOOK IT: " + gameObject.name);
-        God.LM.AwardPoint(pc);
+        pc.GetPoint(1);
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
         if (!NetworkManager.Singleton.IsServer) return;
         FirstPersonController pc = other.gameObject.GetComponent<FirstPersonController>();
-        Debug.Log("OCE: " + pc);
+        Debug.Log("OCE: " + pc + " / " + other.gameObject);
         if(pc != null)
             GetTaken(pc);
     }

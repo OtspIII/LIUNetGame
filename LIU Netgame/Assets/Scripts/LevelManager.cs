@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
         if (!Scores.ContainsKey(who)) Scores.Add(who, amt);
         else Scores[who] += amt;
         if(Scores[who] >= ToWin) SetWinner(who);
-        string txt = who.Name;
+        string txt = who.Name.Value.ToString();
         if (targ != "") txt += " > " + targ;
         txt += " ("+Scores[who]+")";
         StartCoroutine(Announce(txt));
@@ -60,14 +60,14 @@ public class LevelManager : MonoBehaviour
 
     public void SetWinner(FirstPersonController who)
     {
-        Debug.Log(who.Name + " Wins!");
+        Debug.Log(who.Name.Value + " Wins!");
         God.LS.StartCoroutine(Winner(who));
 
     }
     
     public IEnumerator Winner(FirstPersonController who)
     {
-        God.AnnounceText.text = who.Name + " WINS!";
+        God.AnnounceText.text = who.Name.Value + " WINS!";
         yield return new WaitForSeconds(3);
         God.AnnounceText.text = "";
         God.LS.StartLevel();

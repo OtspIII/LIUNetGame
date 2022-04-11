@@ -17,6 +17,7 @@ public static class God
     public static TextMeshProUGUI UpdateText;
     public static Camera Camera;
     public static List<FirstPersonController> Players = new List<FirstPersonController>();
+    public static string NamePick;
     
     public static NetStatus GetStatus()
     {

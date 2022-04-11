@@ -77,7 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Holder: {fileID: 4239301341163563426}
   Held: {fileID: 0}
-  RespawnTime: 15
+  RespawnTime: 5
 --- !u!1 &9173568791524465706
 GameObject:
   m_ObjectHideFlags: 0
